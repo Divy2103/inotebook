@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const mongoURI = "mongodb://127.0.0.1:27017/?readPreference=primary&appName=divy&directConnection=true&tls=false"
 
-const connectToMongo =  () =>{
-    mongoose.connect(mongoURI).then(()=>{
+const connectToMongo = () => {
+    mongoose.connect(mongoURI).then(() => {
         console.log("connected successfully")
     })
 }

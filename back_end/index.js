@@ -5,9 +5,14 @@ const port = 4000
 
 connectToMongo();
 
-app.get('/',(req,res)=>{
+// Available routes
+app.use('/api/auth', require('./routes/auth'))
+app.use('/api/notes', require('./routes/notes'))
+
+app.get('/', (req, res) => {
     res.send("Hello world")
 })
-app.listen(port,()=>{
+
+app.listen(port, () => {
     console.log(`Port listen on http://localhost:${port}`)
 })
