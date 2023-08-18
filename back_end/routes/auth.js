@@ -5,10 +5,10 @@ const { body, validationResult } = require('express-validator');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken')
 
-
+//  creating jwt secret
 const JWT_SECRET = 'divyisagoodb@y'
 
-// create a user using POST : "/api/auth/createuser"  Doesn't required Auth No login required
+// create a user using POST : "/api/auth/createuser" login required
 router.post('/createuser', [
     body('email', 'enter a valid name').isEmail(),
     body('name', 'enter a valid name').isLength({ min: 3 }),
@@ -28,6 +28,7 @@ router.post('/createuser', [
                 return res.status(400).json({ error: 'sorry a user with this email already exists' })
             }
 
+            // add solt and hash password
             const salt = await bcrypt.genSalt(10);
             const secPass = await bcrypt.hash(req.body.password, salt);
             // Create a new user
@@ -37,18 +38,59 @@ router.post('/createuser', [
                 password: secPass
             })
             const data = {
-                user:{
-                    id:user.id
+                user: {
+                    id: user.id
                 }
             }
-            const authtoken = jwt.sign(data,JWT_SECRET)
-            console.log(authtoken);
-            res.json({authtoken})
+            // creating auth token
+            const authtoken = jwt.sign(data, JWT_SECRET)
+            res.json({ authtoken })
         }
         // catch error if some external error occured
         catch (error) {
             console.log(error.message);
-            res.status(500).send("some Error Occured");
+            res.status(500).send("Internal server error");
+        }
+    })
+
+
+// authenticate a user using POST : "/api/auth/login"  No login required
+router.post('/login', [
+    body('email', 'enter a valid name').isEmail(),
+    body('password', 'password cannot be blank').exists()
+],
+    async (req, res) => {
+        //  If there are errors return bad request and the errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { email, password } = req.body;
+        // check weather the user with this email exist 
+        try {
+
+            let user = await User.findOne({ email })
+            if (!user) {
+                return res.status(400).json({ error: 'please try to login with correct credentials' })
+            }
+            const pass_compare = await bcrypt.compare(password, user.password)
+            if (!pass_compare) {
+                return res.status(400).json({ error: 'please try to login with correct credentials' })
+            }
+            const data = {
+                user: {
+                    id: user.id
+                }
+            }
+            // creating auth token
+            const authtoken = jwt.sign(data, JWT_SECRET)
+            res.json({ authtoken })
+        }
+        // catch error if some external error occured
+        catch (error) {
+            console.log(error.message);
+            res.status(500).send("Internal server error");
         }
     })
 
