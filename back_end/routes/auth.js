@@ -4,11 +4,12 @@ const router = express.Router()
 const { body, validationResult } = require('express-validator');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken')
+const fetchUser = require('../middleware/fetchUser')
 
 //  creating jwt secret
 const JWT_SECRET = 'divyisagoodb@y'
 
-// create a user using POST : "/api/auth/createuser" login required
+// ROUTE 1 : create a user using POST : "/api/auth/createuser" login required
 router.post('/createuser', [
     body('email', 'enter a valid name').isEmail(),
     body('name', 'enter a valid name').isLength({ min: 3 }),
@@ -54,7 +55,7 @@ router.post('/createuser', [
     })
 
 
-// authenticate a user using POST : "/api/auth/login"  No login required
+// ROUTE 2 : authenticate a user using POST : "/api/auth/login"  No login required
 router.post('/login', [
     body('email', 'enter a valid name').isEmail(),
     body('password', 'password cannot be blank').exists()
@@ -93,5 +94,23 @@ router.post('/login', [
             res.status(500).send("Internal server error");
         }
     })
+
+// ROUTE 3 : get logged in user details using POST : "/api/auth/getuser" login required
+router.post('/getuser', fetchUser,
+    async (req, res) => {
+        //  If there are errors return bad request and the errors
+        try {
+            const userId = req.user.id
+            let user = await User.findById(userId).select({
+                "-password": "password",
+                "-date":"date"})
+            res.send(user)
+            }
+        // catch error if some external error occured
+        catch (error) {
+                console.log(error.message);
+                res.status(500).send("Internal server error");
+            }
+        })
 
 module.exports = router
