@@ -54,7 +54,6 @@ router.post('/createuser', [
         }
     })
 
-
 // ROUTE 2 : authenticate a user using POST : "/api/auth/login"  No login required
 router.post('/login', [
     body('email', 'enter a valid name').isEmail(),
