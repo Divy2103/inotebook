@@ -5,7 +5,7 @@ const Navbar = () => {
     let location = useLocation();
 
     return (
-        <div className="h-20 border-b flex items-center justify-between px-10 text-gray-300 bg-black font-semibold">
+        <div className="h-20 border-b flex items-center justify-between px-10 text-gray-400 bg-black font-semibold">
             <div className="logo font-bold text-4xl cursor-pointer text-white">
                 <Link to="/">iNotebook</Link>
             </div>
