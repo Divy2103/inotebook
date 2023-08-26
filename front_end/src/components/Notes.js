@@ -8,7 +8,7 @@ const Notes = () => {
     return (
         <div className='grid grid-flow-row grid-cols-3 2xl:grid-cols-4 gap-5 mt-10'>
             {notes.map((note) => {
-                return <NoteItem note={note} />;
+                return <NoteItem note={note} key={note._id} />;
             })}
         </div>
     )
