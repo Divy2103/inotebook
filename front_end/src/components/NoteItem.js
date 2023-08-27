@@ -7,6 +7,7 @@ const NoteItem = (props) => {
             <div className='border py-2 px-5'>
                 <h5 className='text-xl font-semibold'>{note.title}</h5>
                 <p className=''>{note.description}</p>
+                <p className=''>{note.tag}</p>
                 {/* <button href="/" className='bg-black text-gray-200 hover:text-white py-2 rounded-lg font-semibold px-5 my-2'>Edit Note</button> */}
                 <div className='flex justify-end'>
                 <i className="fa-solid fa-trash text-2xl m-2 cursor-pointer"></i>

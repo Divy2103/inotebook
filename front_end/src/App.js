@@ -16,8 +16,8 @@ function App() {
       <NoteState>
         <Router>
           <Navbar />
-          <Alert message="This is an amazing react course"/>
-          <div className='px-20 py-10'>
+          {/* <Alert message="This is an amazing react course"/> */}
+          <div className='px-20 py-5'>
           <Routes >
             <Route path="/" element={<Home />}></Route>
             <Route path="/about" element={<About />}></Route>
