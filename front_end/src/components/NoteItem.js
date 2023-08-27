@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import NoteContext from '../context/notes/NoteContext';
 
 const NoteItem = (props) => {
+    const context = useContext(NoteContext);
+    const { deleteNote } = context;
     const { note } = props;
+
+    const handleClick = () => { deleteNote(note._id) }
+    
     return (
         <div className=''>
             <div className='border py-2 px-5'>
@@ -10,8 +16,8 @@ const NoteItem = (props) => {
                 <p className=''>{note.tag}</p>
                 {/* <button href="/" className='bg-black text-gray-200 hover:text-white py-2 rounded-lg font-semibold px-5 my-2'>Edit Note</button> */}
                 <div className='flex justify-end'>
-                <i className="fa-solid fa-trash text-2xl m-2 cursor-pointer"></i>
-                <i className="fa-solid fa-pen-to-square text-2xl m-2 cursor-pointer"></i>
+                    <i className="fa-solid fa-trash text-2xl m-2 cursor-pointer" onClick={handleClick}></i>
+                    <i className="fa-solid fa-pen-to-square text-2xl m-2 cursor-pointer"></i>
                 </div>
             </div>
         </div>
