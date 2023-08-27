@@ -4,20 +4,24 @@ import NoteItem from './NoteItem';
 
 const Notes = () => {
     const context = useContext(NoteContext);
-    const { notes, getNotes } = context;
+    const { notes, getNotes, editNote } = context;
     useEffect(() => {
         getNotes()
+        // eslint-disable-next-line
     }, [])
     const ref = useRef(null)
-    const [note, setNote] = useState({ etitle: "", edescription: "", etag: "default" })
+    const refClose = useRef(null)
+    const [note, setNote] = useState({ eid: "", etitle: "", edescription: "", etag: "default" })
+
     const updateNote = (currentNote) => {
         ref.current.click();
-        setNote({ etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag })
+        setNote({ eid: currentNote._id, etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag })
     }
 
     const handleClick = (e) => {
         e.preventDefault();
-        console.log("updating the note", note)
+        editNote(note.eid,note.etitle,note.edescription,note.etag)
+        refClose.current.click()
     }
 
     const onChange = (e) => {
@@ -45,7 +49,7 @@ const Notes = () => {
                     </div>
                     <div className="modal-action flex space-x-2 justify-end">
                         {/* <button className="btn py-2 px-5 font-medium text-xl bg-red-700 text-gray-200 hover:text-white rounded-md">Close</button> */}
-                        <button className=" absolute right-5 top-5 text-2xl bg-gray-200 rounded-full py-1 px-3 hover:bg-gray-300">✕</button>
+                        <button className=" absolute right-5 top-5 text-2xl bg-gray-200 rounded-full py-1 px-3 hover:bg-gray-300" ref={refClose}>✕</button>
                         <button className="btn py-2 px-5 font-medium text-xl bg-black text-gray-200 hover:text-white rounded-md" onClick={handleClick}>Save</button>
                     </div>
                 </form>
