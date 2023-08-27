@@ -28,7 +28,7 @@ const Notes = () => {
         setNote({ ...note, [e.target.name]: e.target.value })
     }
     return (
-        <>
+        <div className='my-5 mx-3 p-2'>
             {/* Open the modal using ID.showModal() method */}
             <button className="btn hidden" ref={ref} onClick={() => window.my_modal_1.showModal()}>open modal</button>
             <dialog id="my_modal_1" className="modal px-14 py-10 w-[50%] rounded-xl">
@@ -50,17 +50,19 @@ const Notes = () => {
                     <div className="modal-action flex space-x-2 justify-end">
                         {/* <button className="btn py-2 px-5 font-medium text-xl bg-red-700 text-gray-200 hover:text-white rounded-md">Close</button> */}
                         <button className=" absolute right-5 top-5 text-2xl bg-gray-200 rounded-full py-1 px-3 hover:bg-gray-300" ref={refClose}>✕</button>
-                        <button className="btn py-2 px-5 font-medium text-xl bg-black text-gray-200 hover:text-white rounded-md" onClick={handleClick}>Save</button>
+                        <button disabled={note.etitle.length < 3 || note.edescription.length < 5} className="btn py-2 px-5 font-medium text-xl bg-black text-gray-200 hover:text-white rounded-md disabled:opacity-80 disabled:cursor-not-allowed" onClick={handleClick}>Save</button>
                     </div>
                 </form>
             </dialog>
 
+            <h1 className='text-3xl font-semibold '>Your Notes</h1>
             <div className='grid grid-flow-row grid-cols-3 2xl:grid-cols-4 gap-5 mt-5'>
+                {notes.length === 0 && <div className='mx-1 text-lg'>No Notes To Desplay</div> }
                 {notes.map((note) => {
                     return <NoteItem note={note} updateNote={updateNote} key={note._id} />;
                 })}
             </div>
-        </>
+        </div>
     )
 }
 
