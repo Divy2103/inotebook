@@ -27,6 +27,10 @@ const AddNote = () => {
           <label htmlFor="description" className='text-xl font-semibold'>Description</label>
           <input type="text" id='description' name='description' className='w-full border border-slate-400 p-2 text-lg outline-slate-400' placeholder='add a description' onChange={onChange}/>
         </div>
+        <div className='mb-5 flex flex-col space-y-2'>
+          <label htmlFor="tag" className='text-xl font-semibold'>Tag</label>
+          <input type="text" id='tag' name='tag' className='w-full border border-slate-400 p-2 text-lg outline-slate-400' placeholder='add a tag' onChange={onChange}/>
+        </div>
         <button className='bg-black p-2 px-5 text-xl text-gray-200 place-self-end hover:text-white rounded-lg font-medium' onClick={handleClick}>Add Note</button>
       </form>
     </>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import NoteContext from '../context/notes/NoteContext';
 import NoteItem from './NoteItem';
 
@@ -8,14 +8,55 @@ const Notes = () => {
     useEffect(() => {
         getNotes()
     }, [])
+    const ref = useRef(null)
+    const [note, setNote] = useState({ etitle: "", edescription: "", etag: "default" })
+    const updateNote = (currentNote) => {
+        ref.current.click();
+        setNote({ etitle: currentNote.title, edescription: currentNote.description, etag: currentNote.tag })
+    }
 
+    const handleClick = (e) => {
+        e.preventDefault();
+        console.log("updating the note", note)
+    }
+
+    const onChange = (e) => {
+        setNote({ ...note, [e.target.name]: e.target.value })
+    }
     return (
-        <div className='grid grid-flow-row grid-cols-3 2xl:grid-cols-4 gap-5 mt-5'>
+        <>
+            {/* Open the modal using ID.showModal() method */}
+            <button className="btn hidden" ref={ref} onClick={() => window.my_modal_1.showModal()}>open modal</button>
+            <dialog id="my_modal_1" className="modal px-14 py-10 w-[50%] rounded-xl">
+                <h3 className="font-bold text-3xl">Edit Note</h3>
+                <hr className='my-2' />
+                <form method="dialog" className="modal-box">
+                    <div className='mb-5 flex flex-col space-y-2'>
+                        <label htmlFor="etitle" className='text-xl font-semibold'>Title</label>
+                        <input type="text" id='etitle' name='etitle' className='w-full border border-slate-400 p-2 text-lg outline-slate-400' placeholder='add a title' onChange={onChange} value={note.etitle} />
+                    </div>
+                    <div className='mb-5 flex flex-col space-y-2'>
+                        <label htmlFor="edescription" className='text-xl font-semibold'>Description</label>
+                        <input type="text" id='edescription' name='edescription' className='w-full border border-slate-400 p-2 text-lg outline-slate-400' placeholder='add a description' onChange={onChange} value={note.edescription} />
+                    </div>
+                    <div className='mb-5 flex flex-col space-y-2'>
+                        <label htmlFor="etag" className='text-xl font-semibold'>Tag</label>
+                        <input type="text" id='etag' name='etag' className='w-full border border-slate-400 p-2 text-lg outline-slate-400' placeholder='add a tag' onChange={onChange} value={note.etag} />
+                    </div>
+                    <div className="modal-action flex space-x-2 justify-end">
+                        {/* <button className="btn py-2 px-5 font-medium text-xl bg-red-700 text-gray-200 hover:text-white rounded-md">Close</button> */}
+                        <button className=" absolute right-5 top-5 text-2xl bg-gray-200 rounded-full py-1 px-3 hover:bg-gray-300">✕</button>
+                        <button className="btn py-2 px-5 font-medium text-xl bg-black text-gray-200 hover:text-white rounded-md" onClick={handleClick}>Save</button>
+                    </div>
+                </form>
+            </dialog>
 
-            {notes.map((note) => {
-                return <NoteItem note={note} key={note._id} />;
-            })}
-        </div>
+            <div className='grid grid-flow-row grid-cols-3 2xl:grid-cols-4 gap-5 mt-5'>
+                {notes.map((note) => {
+                    return <NoteItem note={note} updateNote={updateNote} key={note._id} />;
+                })}
+            </div>
+        </>
     )
 }
 
