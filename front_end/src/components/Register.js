@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-const Register = () => {
+const Register = (props) => {
     const hostName = "http://localhost:4000"
     const [credentials, setCredentials] = useState({ email: "", password: "", name: "", cpassword: "" })
     const navigate = useNavigate();
@@ -24,6 +24,10 @@ const Register = () => {
                 console.log("password match")
                 localStorage.setItem('token', json.authtoken)
                 navigate("/");
+                props.showAlert("Account Created Successfully", "Success")
+            }
+            else {
+                props.showAlert("Invalid Details", "Error")
             }
         }
     }
@@ -32,7 +36,7 @@ const Register = () => {
     }
     return (
         <>
-            <main className="flex mt-5">
+            <main className="flex mt-10">
                 <div className="mx-auto flex w-full max-w-2xl flex-col px-4 sm:px-6">
                     <div className="relative">
                         <h1 className="text-center  text-3xl font-medium tracking-tight text-gray-900">Register</h1>
@@ -59,13 +63,13 @@ const Register = () => {
                                 <div>
                                     <label htmlFor="password" className="mb-2 block text-xl font-normal text-black">Password</label>
                                     <input id="password" type="password" name="password" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="Password"
-                                        placeholder="Enter Your Password" required onChange={onChange} value={credentials.password} minLength={5}/>
+                                        placeholder="Enter Your Password" required onChange={onChange} value={credentials.password} minLength={5} />
                                 </div>
                                 <div>
                                     <label htmlFor="cpassword" className="mb-2 block text-xl font-normal text-black">Confirm Password</label>
                                     <input id="cpassword" type="password" name="cpassword" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="Password"
                                         placeholder="Confirm Your Password" required onChange={onChange} value={credentials.cpassword} />
-                                      {credentials.cpassword !== credentials.password  ? <p className='text-gray-800 text-sm'>password not match</p> : '' }
+                                    {credentials.cpassword !== credentials.password ? <p className='text-gray-800 text-sm'>password not match</p> : ''}
                                 </div>
                             </div>
 

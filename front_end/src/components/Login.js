@@ -1,7 +1,7 @@
 import React,{ useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-const Login = () => {
+const Login = (props) => {
     const hostName = "http://localhost:4000"
     const [credentials, setCredentials] = useState({ email: "", password: "" })
     const navigate = useNavigate();
@@ -21,6 +21,10 @@ const Login = () => {
             // Save the authtoken and redirect
             localStorage.setItem('token',json.authtoken)
             navigate("/");
+            props.showAlert("Logged In successfully","Success")
+        }
+        else{
+            props.showAlert("Invalid Credintials","Error")
         }
     }
     const onChange = (e) => {
@@ -28,7 +32,7 @@ const Login = () => {
     }
     return (
         <>
-            <main className="flex mt-5">
+            <main className="flex mt-10">
                 <div className="mx-auto flex w-full max-w-2xl flex-col px-4 sm:px-6">
                     <div className="relative">
                         <h1 className="text-center  text-3xl font-medium tracking-tight text-gray-900">Login</h1>
@@ -60,7 +64,7 @@ const Login = () => {
                             </div>
 
                             <button type="submit"
-                                className="mt-10 w-full text-white bg-gray-700 hover:bg-gray-900 font-medium rounded-lg text-lg tracking-wide px-5 py-2.5 text-center">Login</button>
+                                className="mt-10 w-full text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-lg tracking-wide px-5 py-2.5 text-center">Login</button>
                         </form>
 
                     </div>
