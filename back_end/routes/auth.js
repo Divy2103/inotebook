@@ -47,7 +47,7 @@ router.post('/createuser', [
             // creating auth token
             const authtoken = jwt.sign(data, JWT_SECRET)
             success = true
-            res.json({success, authtoken })
+            res.json({success, authtoken , name:req.body.name })
         }
         // catch error if some external error occured
         catch (error) {
@@ -89,7 +89,7 @@ router.post('/login', [
             // creating auth token
             const authtoken = jwt.sign(data, JWT_SECRET)
             success = true;
-            res.json({ success, authtoken })
+            res.json({ success, authtoken , name:user.name })
         }
         // catch error if some external error occured
         catch (error) {

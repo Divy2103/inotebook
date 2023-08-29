@@ -19,12 +19,14 @@ const Register = (props) => {
             });
             const json = await response.json();
             console.log(json);
+            console.log(json.name);
 
             if (json.success) {
                 console.log("password match")
                 localStorage.setItem('token', json.authtoken)
                 navigate("/");
                 props.showAlert("Account Created Successfully", "Success")
+                localStorage.setItem("username",json.name)
             }
             else {
                 props.showAlert("Invalid Details", "Error")
