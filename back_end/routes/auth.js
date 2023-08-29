@@ -11,7 +11,7 @@ const JWT_SECRET = 'divyisagoodb@y'
 
 // ROUTE 1 : create a user using POST : "/api/auth/createuser" login required
 router.post('/createuser', [
-    body('email', 'enter a valid name').isEmail(),
+    body('email', 'enter a valid Email').isEmail(),
     body('name', 'enter a valid name').isLength({ min: 3 }),
     body('password', 'enter a valid password').isLength({ min: 4, max: 12 })
 ],
@@ -56,11 +56,12 @@ router.post('/createuser', [
 
 // ROUTE 2 : authenticate a user using POST : "/api/auth/login"  No login required
 router.post('/login', [
-    body('email', 'enter a valid name').isEmail(),
+    body('email', 'enter a valid Email').isEmail(),
     body('password', 'password cannot be blank').exists()
 ],
     async (req, res) => {
         //  If there are errors return bad request and the errors
+        let success = false
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -72,11 +73,11 @@ router.post('/login', [
 
             let user = await User.findOne({ email })
             if (!user) {
-                return res.status(400).json({ error: 'please try to login with correct credentials' })
+                return res.status(400).json({ success, error: 'please try to login with correct credentials' })
             }
             const pass_compare = await bcrypt.compare(password, user.password)
             if (!pass_compare) {
-                return res.status(400).json({ error: 'please try to login with correct credentials' })
+                return res.status(400).json({ success, error: 'please try to login with correct credentials' })
             }
             const data = {
                 user: {
@@ -85,7 +86,8 @@ router.post('/login', [
             }
             // creating auth token
             const authtoken = jwt.sign(data, JWT_SECRET)
-            res.json({ authtoken })
+            success = true;
+            res.json({ success, authtoken })
         }
         // catch error if some external error occured
         catch (error) {
@@ -102,14 +104,15 @@ router.post('/getuser', fetchUser,
             const userId = req.user.id
             let user = await User.findById(userId).select({
                 "-password": "password",
-                "-date":"date"})
+                "-date": "date"
+            })
             res.send(user)
-            }
+        }
         // catch error if some external error occured
         catch (error) {
-                console.log(error.message);
-                res.status(500).send("Internal server error");
-            }
-        })
+            console.log(error.message);
+            res.status(500).send("Internal server error");
+        }
+    })
 
 module.exports = router
