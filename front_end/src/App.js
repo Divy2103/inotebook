@@ -19,7 +19,7 @@ function App() {
       <NoteState>
         <Router>
           <Navbar/>
-          <Alert message="Hello"/>
+          {/* <Alert message="Hello"/> */}
           <div className='py-5 px-10'>
           <Routes>
             <Route path="/login" element={<Login />} />

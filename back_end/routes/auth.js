@@ -17,6 +17,7 @@ router.post('/createuser', [
 ],
     async (req, res) => {
         //  If there are errors return bad request and the errors
+        let success = false
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -26,7 +27,7 @@ router.post('/createuser', [
         try {
             let user = await User.findOne({ email: req.body.email })
             if (user) {
-                return res.status(400).json({ error: 'sorry a user with this email already exists' })
+                return res.status(400).json({success, error: 'sorry a user with this email already exists' })
             }
 
             // add solt and hash password
@@ -45,7 +46,8 @@ router.post('/createuser', [
             }
             // creating auth token
             const authtoken = jwt.sign(data, JWT_SECRET)
-            res.json({ authtoken })
+            success = true
+            res.json({success, authtoken })
         }
         // catch error if some external error occured
         catch (error) {

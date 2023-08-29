@@ -39,7 +39,7 @@ const Login = () => {
                             </Link>
                         </p>
                     </div>
-                    <div className=" mt-10 flex-auto bg-white shadow-2xl sshadow-gray-900/10 sm:mx-0 sm:flex-none px-20 py-10 rounded-[2.5rem]">
+                    <div className=" mt-5 flex-auto bg-white shadow-2xl sshadow-gray-900/10 sm:mx-0 sm:flex-none px-20 py-10 rounded-[2.5rem]">
                         <form onSubmit={handleSubmit}>
                             <div className="space-y-4">
                                 <div>

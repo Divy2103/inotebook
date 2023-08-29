@@ -1,6 +1,35 @@
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Register = () => {
+    const hostName = "http://localhost:4000"
+    const [credentials, setCredentials] = useState({ email: "", password: "", name: "", cpassword: "" })
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const { name, password, email } = credentials;
+        if (password === credentials.cpassword) {
+            const response = await fetch(`${hostName}/api/auth/createuser`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, email, password })
+            });
+            const json = await response.json();
+            console.log(json);
+
+            if (json.success) {
+                console.log("password match")
+                localStorage.setItem('token', json.authtoken)
+                navigate("/");
+            }
+        }
+    }
+    const onChange = (e) => {
+        setCredentials({ ...credentials, [e.target.name]: e.target.value })
+    }
     return (
         <>
             <main className="flex mt-5">
@@ -14,30 +43,30 @@ const Register = () => {
                             </Link>
                         </p>
                     </div>
-                    <div className=" mt-10 flex-auto bg-white shadow-2xl sshadow-gray-900/10 sm:mx-0 sm:flex-none px-20 py-10 rounded-[2.5rem]">
-                        <form>
+                    <div className=" mt-5 flex-auto bg-white shadow-2xl sshadow-gray-900/10 sm:mx-0 sm:flex-none px-20 py-10 rounded-[2.5rem]">
+                        <form onSubmit={handleSubmit}>
                             <div className="space-y-4">
                                 <div>
                                     <label htmlFor="name" className="mb-2 block text-xl font-normal text-black">Name</label>
                                     <input id="name" type="text" name="name" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="name"
-                                        placeholder="Enter Your Name" required />
+                                        placeholder="Enter Your Name" required onChange={onChange} value={credentials.name} />
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="mb-2 block text-xl font-normal text-black">Email</label>
                                     <input id="email" type="email" name="email" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="email"
-                                        placeholder="Enter Your Email" required />
+                                        placeholder="Enter Your Email" required onChange={onChange} value={credentials.email} />
                                 </div>
                                 <div>
                                     <label htmlFor="password" className="mb-2 block text-xl font-normal text-black">Password</label>
                                     <input id="password" type="password" name="password" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="Password"
-                                        placeholder="Enter Your Password" required />
+                                        placeholder="Enter Your Password" required onChange={onChange} value={credentials.password} minLength={5}/>
                                 </div>
                                 <div>
                                     <label htmlFor="cpassword" className="mb-2 block text-xl font-normal text-black">Confirm Password</label>
                                     <input id="cpassword" type="password" name="cpassword" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="Password"
-                                        placeholder="Confirm Your Password" required />
+                                        placeholder="Confirm Your Password" required onChange={onChange} value={credentials.cpassword} />
+                                      {credentials.cpassword !== credentials.password  ? <p className='text-gray-800 text-sm'>password not match</p> : '' }
                                 </div>
-
                             </div>
 
                             <button type="submit"
