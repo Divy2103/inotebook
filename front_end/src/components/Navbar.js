@@ -13,7 +13,7 @@ const Navbar = () => {
         <>
             <div className="h-16 border-b flex items-center justify-between px-10 text-gray-300 bg-gray-700 font-semibold">
                 <div className="logo font-bold text-4xl cursor-pointer text-white">
-                    <Link to="/">iNotebook</Link>
+                    <Link to="/">Notes App</Link>
                 </div>
                 <ul className='flex justify-center items-center space-x-10 text-2xl'>
                     <li className={`hover:text-white cursor-pointer ${location.pathname === "/" ? 'text-white' : ''} `}> <Link to='/'>Home</Link> </li>
