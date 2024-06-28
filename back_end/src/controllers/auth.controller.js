@@ -127,6 +127,37 @@ const google = async (req, res) => {
     }
 }
 
+
+const updateProfile = async (req, res) => {
+    let success = false
+    const { name, phone } = req.body;
+    // check weather the user with this email exist 
+    console.log("name",name)
+    console.log("phone",phone)
+
+    try {
+
+        const user = await User.findByIdAndUpdate(
+            req.user?.id,
+            {
+                $set: {
+                    name,
+                    phone,
+                },
+            },
+            { new: true }
+        ).select("-password");
+        console.log("user",user)
+        res.json({ success, message: "updated successfull", user })
+    }
+    // catch error if some external error occured
+    catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+}
+
+
 const changeProfileImage = async (req, res) => {
     const profilePicPath = req.file.path;
     console.log("profilePicpath", profilePicPath)
@@ -168,5 +199,6 @@ export {
     login,
     google,
     getUser,
+    updateProfile,
     changeProfileImage
 }

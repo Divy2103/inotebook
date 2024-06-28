@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Oauth from './Oauth'
 
@@ -20,13 +20,13 @@ const Login = (props) => {
         console.log(json);
         if (json.success) {
             // Save the authtoken and redirect
-            localStorage.setItem('token',json.authtoken)
-            localStorage.setItem("username",json.name)
+            localStorage.setItem('token', json.authtoken)
+            localStorage.setItem("username", json.name)
             navigate("/");
-            props.showAlert("Logged In successfully","Success")
+            props.showAlert("Logged In successfully", "Success")
         }
-        else{
-            props.showAlert("Invalid Credintials","Error")
+        else {
+            props.showAlert("Invalid Credintials", "Error")
         }
     }
     const onChange = (e) => {
@@ -51,12 +51,12 @@ const Login = (props) => {
                                 <div>
                                     <label htmlFor="email" className="mb-2 block text-xl font-normal text-black">Email</label>
                                     <input id="email" type="email" name="email" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="email"
-                                        placeholder="Enter Your Email" required value={credentials.email} onChange={onChange}/>
+                                        placeholder="Enter Your Email" required value={credentials.email} onChange={onChange} />
                                 </div>
                                 <div>
                                     <label htmlFor="password" className="mb-2 block text-xl font-normal text-black">Password</label>
                                     <input id="password" type="password" name="password" className="block w-full appearance-none rounded-lg border border-gray-200 bg-white p-3 text-gray-900 placeholder:text-gray-400 focus:border-gray-500 focus:outline-none text-sm" autoComplete="Password"
-                                        placeholder="Enter Your Password" required value={credentials.password} onChange={onChange}/>
+                                        placeholder="Enter Your Password" required value={credentials.password} onChange={onChange} />
                                 </div>
                             </div>
                             <div className="flex items-center justify-end mt-5">
