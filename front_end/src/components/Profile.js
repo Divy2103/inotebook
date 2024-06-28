@@ -1,14 +1,15 @@
 import React, { useContext } from 'react'
 import NoteContext from '../context/notes/NoteContext';
 import ChangePassword from './ChangePassword';
+import ProfileImage from './ProfileImage';
 function Profile() {
 
     const context = useContext(NoteContext);
     const { user } = context;
-    console.log(user.name);
     return (
-        <div className='w-full min-h-screen justify-center items-center'>
-            <div className='shadow-md p-5 max-w-3xl m-auto'>
+        <div className='w-full min-h-screen flex space-x-5 justify-center'>
+            <ProfileImage  user={user}/>
+            <div className='shadow-md p-5 w-7/12'>
                 <div className='ml-6'>
                     <div className='text-2xl font-bold'>User Information</div>
                     <p className='mb-2'>details and Information about user</p>

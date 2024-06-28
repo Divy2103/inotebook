@@ -18,6 +18,7 @@ const NoteState = (props) => {
             }
         });
         const json = await response.json();
+        console.log("getUser",json);
         setUser(json)
     }
     // get all notes

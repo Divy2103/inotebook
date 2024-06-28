@@ -8,7 +8,6 @@ import { Fragment, useState } from "react";
 const Navbar = () => {
     const context = useContext(NoteContext);
     const { user, getUser } = context;
-    console.log("user", user);
     let location = useLocation();
     const navigate = useNavigate()
 

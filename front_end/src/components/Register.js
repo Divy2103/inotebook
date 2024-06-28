@@ -19,8 +19,6 @@ const Register = (props) => {
                 body: JSON.stringify({ name, email, password })
             });
             const json = await response.json();
-            console.log(json);
-            console.log(json.name);
 
             if (json.success) {
                 console.log("password match")

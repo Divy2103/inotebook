@@ -27,6 +27,7 @@ function Oauth(props) {
             })
             console.log("hello how are you")
             const data = await res.json();
+            console.log(data)
             if (data.success) {
                 // Save the authtoken and redirect
                 localStorage.setItem('token',data.authtoken)
