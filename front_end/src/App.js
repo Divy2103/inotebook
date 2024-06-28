@@ -11,9 +11,16 @@ import NoteState from './context/notes/NoteState';
 import Alert from './components/Alert';
 import Login from './components/Login';
 import Register from './components/Register';
-import { useState } from 'react';
+import { useState, useEffect,useContext } from 'react';
+import Profile from './components/Profile';
+import NoteContext from './context/notes/NoteContext';
+import { useNavigate } from 'react-router-dom'
 
 function App() {
+  // const navigate = useNavigate()
+  // const context = useContext(NoteContext);
+  // const { getUser } = context;
+
   const [alert, setAlert] = useState(null)
   const showAlert = (message, type) => {
     setAlert({
@@ -24,18 +31,29 @@ function App() {
       setAlert(null);
     }, 1500);
   }
+
+  // useEffect(() => {
+  //   if (localStorage.getItem('token')) {
+  //     getUser()
+  //   }
+  //   else {
+  //     navigate("/login")
+  //   }
+  // }, [])
+
   return (
     <>
       <NoteState>
         <Router>
           <Navbar />
-          <Alert alert={alert}/>
+          <Alert alert={alert} />
           <div className='py-5 px-10'>
             <Routes>
-              <Route path="/login" element={<Login showAlert={showAlert}/>} />
-              <Route path="/register" element={<Register showAlert={showAlert}/>} />
-              <Route path="/" element={<Home showAlert={showAlert}/>}></Route>
+              <Route path="/login" element={<Login showAlert={showAlert} />} />
+              <Route path="/register" element={<Register showAlert={showAlert} />} />
+              <Route path="/" element={<Home showAlert={showAlert} />}></Route>
               <Route path="/about" element={<About />}></Route>
+              <Route path="/profile" element={<Profile />}></Route>
             </Routes>
           </div>
         </Router>

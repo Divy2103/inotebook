@@ -1,5 +1,6 @@
 import React,{ useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Oauth from './Oauth'
 
 const Login = (props) => {
     const hostName = "http://localhost:4000"
@@ -63,9 +64,9 @@ const Login = (props) => {
                                     className="font-semibold text-gray-700 hover:underline">Forgot
                                     password?</Link>
                             </div>
-
                             <button type="submit"
                                 className="mt-10 w-full text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-lg tracking-wide px-5 py-2.5 text-center">Login</button>
+                            <Oauth />
                         </form>
 
                     </div>

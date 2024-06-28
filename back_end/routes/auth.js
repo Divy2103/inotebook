@@ -5,6 +5,7 @@ const { body, validationResult } = require('express-validator');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken')
 const fetchUser = require('../middleware/fetchUser')
+const { google } = require('../controllers/auth.controller.js')
 
 //  creating jwt secret
 const JWT_SECRET = 'divyisagoodb@y'
@@ -29,7 +30,7 @@ router.post('/createuser', [
             if (user) {
                 return res.status(400).json({success, error: 'sorry a user with this email already exists' })
             }
-
+            
             // add solt and hash password
             const salt = await bcrypt.genSalt(10);
             const secPass = await bcrypt.hash(req.body.password, salt);
@@ -99,7 +100,7 @@ router.post('/login', [
     })
 
 // ROUTE 3 : get logged in user details using POST : "/api/auth/getuser" login required
-router.post('/getuser', fetchUser,
+router.get('/getuser', fetchUser,
     async (req, res) => {
         //  If there are errors return bad request and the errors
         try {
@@ -108,7 +109,8 @@ router.post('/getuser', fetchUser,
                 "-password": "password",
                 "-date": "date"
             })
-            res.send(user)
+            console.log(user)
+            res.json(user)
         }
         // catch error if some external error occured
         catch (error) {
@@ -116,5 +118,49 @@ router.post('/getuser', fetchUser,
             res.status(500).send("Internal server error");
         }
     })
+
+router.post("/google", async (req, res) => {
+    const {name,email,profilePic} = req.body;
+    // console.log(req.body);
+    let success = false
+    try {
+        const user = await User.findOne({email});
+        console.log("user",user);
+        if(user){
+            const data = {
+                user: {
+                    id: user.id
+                }
+            }
+            const authtoken = jwt.sign(data, JWT_SECRET);
+            success = true
+            return res.json({success,message:"google login successfull", authtoken , name:req.body.name })
+        }else{
+            const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8); 
+            
+            const salt = await bcrypt.genSalt(10);
+            const secPass = await bcrypt.hash(generatePassword, salt);
+
+            const newUser = await User.create({
+                name,
+                email,
+                password: secPass,
+                profilePic
+            })
+            const data = {
+                newUser: {
+                    id: newUser._id
+                }
+            }
+            const authtoken = jwt.sign(data, JWT_SECRET)
+            success = true;
+            res.json({ success,message:"login successfull", authtoken , name:user.name })
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+})
 
 module.exports = router

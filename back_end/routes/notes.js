@@ -6,7 +6,7 @@ const Note = require("../model/Note")
 
 // ROUTE 1 : get all the notes using GET : "/api/auth/fetchallnotes" login required
 router.get('/fetchallnotes', fetchUser, async (req, res) => {
-
+    console.log("hello")
     try {
         const notes = await Note.find({ user: req.user.id })
         res.json(notes)
