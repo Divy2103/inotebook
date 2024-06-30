@@ -1,8 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-function ChangePassword() {
+function ChangePassword(props) {
+  const hostName = "http://localhost:4000";
+  const [credentials, setCredentials] = useState({ oldPassword: '', newPassword: '' });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch(`${hostName}/api/auth/changePassword`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem('token')
+      },
+      body: JSON.stringify({ oldPass: credentials.oldPassword, newPass: credentials.newPassword })
+    })
+    const data = await response.json();
+    console.log("data",data.success);
+    console.log("data after change password", data);
+    if (data.success) {
+      props.showAlert("password Changed", "Success");
+    } else {
+      props.showAlert("password not match", "Error");
+    }
+    setCredentials({ oldPassword: '', newPassword: '' });
+  }
+
+  const handleChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  }
+
   return (
-    <form className="max-w-xl my-16 xl:mx-auto mx-7">
+    <form onSubmit={handleSubmit} className="max-w-xl my-16 xl:mx-auto mx-7">
       <div className="space-y-12">
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -22,8 +50,10 @@ function ChangePassword() {
                   type="password"
                   name="oldPassword"
                   id="oldPassword"
+                  value={credentials.oldPassword}
+                  onChange={handleChange}
                   autoComplete="given-name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 font-extrabold"
                 />
               </div>
             </div>
@@ -41,7 +71,9 @@ function ChangePassword() {
                   name="newPassword"
                   id="newPassword"
                   autoComplete="family-name"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                  value={credentials.newPassword}
+                  onChange={handleChange}
+                  className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 font-extrabold"
                 />
               </div>
             </div>

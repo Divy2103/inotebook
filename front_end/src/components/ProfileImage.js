@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import axios from 'axios'
-function ProfileImage({ user }) {
+function ProfileImage({ user,showAlert }) {
     const hostName = "http://localhost:4000"
     const ref = useRef();
     // const context = useContext(NoteContext);
@@ -29,10 +29,9 @@ function ProfileImage({ user }) {
                 }
             );
 
-            // const json = await response.json();
-            // console.log("json in image", json);
         } catch (error) {
-
+            console.log(error);
+            showAlert("error occured", "danger");
         }
 
     }
@@ -43,13 +42,13 @@ function ProfileImage({ user }) {
     }
 
     return (
-        <div className='shadow-md p-5 w-4/12'>
-            <div className='flex flex-col items-center'>
+        <div className='shadow-md p-5 w-4/12 max-h-96'>
+            <div className='flex flex-col justify-center items-center'>
                 <form id="form">
                     <button
                         type='submit'
                         onClick={handleClick}>
-                        <img src={profileImage} alt="avatar" className='w-48 h-48 rounded-full bg-center cursor-pointer hover:opacity-70 delay-300' />
+                        <img src={profileImage} alt="avatar" className='w-60 h-60 rounded-full bg-center cursor-pointer hover:opacity-70 delay-300 border border-black' />
                     </button>
                     <input 
                     type="file" 
@@ -57,8 +56,8 @@ function ProfileImage({ user }) {
                     id='file' 
                     hidden
                     onChange={handleImageUpload} ref={ref} />
-                    <h1 className='m-2 text-xl font-bold'>{user.name}</h1>
                 </form>
+                    <h1 className='mt-3 text-xl font-bold'>{user.name}</h1>
             </div>
         </div>
     )

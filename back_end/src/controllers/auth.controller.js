@@ -132,8 +132,8 @@ const updateProfile = async (req, res) => {
     let success = false
     const { name, phone } = req.body;
     // check weather the user with this email exist 
-    console.log("name",name)
-    console.log("phone",phone)
+    console.log("name", name)
+    console.log("phone", phone)
 
     try {
 
@@ -147,7 +147,7 @@ const updateProfile = async (req, res) => {
             },
             { new: true }
         ).select("-password");
-        console.log("user",user)
+        success = true
         res.json({ success, message: "updated successfull", user })
     }
     // catch error if some external error occured
@@ -156,7 +156,6 @@ const updateProfile = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 }
-
 
 const changeProfileImage = async (req, res) => {
     const profilePicPath = req.file.path;
@@ -184,13 +183,36 @@ const changeProfileImage = async (req, res) => {
 
         user.profilePic = profilePic.url;
         await user.save({ validateBeforeSave: false });
+        success = true
         return res
             .status(200)
-            .json({ message: "upload successful", user });
+            .json({ success, message: "upload successful", user });
 
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal server error");
+    }
+}
+
+const changePassword = async (req, res) => {
+    const { oldPass, newPass } = req.body;
+    console.log("oldPass", oldPass);
+    console.log("newPass", newPass);
+    let success = false;
+    try {
+        const user = await User.findById(req.user?.id);
+        const pass_compare = await bcrypt.compare(oldPass, user.password);
+        if (!pass_compare) {
+            return res.status(400).json({ success, error: 'password does not match' });
+        }
+        const salt = await bcrypt.genSalt(10);
+        const secPass = await bcrypt.hash(newPass, salt);
+        user.password = secPass;
+        await user.save();
+        success = true;
+        return res.json({ success, message: "password changed" });
+    } catch (error) {
+        console.log(error.message);
     }
 }
 
@@ -200,5 +222,6 @@ export {
     google,
     getUser,
     updateProfile,
-    changeProfileImage
+    changeProfileImage,
+    changePassword
 }

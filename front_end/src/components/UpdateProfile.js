@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
-function UpdateProfile({ user }) {
+function UpdateProfile({ user,showAlert }) {
     const hostName = "http://localhost:4000";
     const [credentials, setCredentials] = useState({ name: user.name, phone: user.phone });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(!credentials.name && !credentials.phone){
+            showAlert("Please fill any of the fields", "danger");
+            return;
+        }
         const response = await fetch(`${hostName}/api/auth/updateProfile`, {
             method: "PUT",
             headers: {
@@ -14,8 +18,14 @@ function UpdateProfile({ user }) {
             },
             body: JSON.stringify({ name: credentials.name, phone: credentials.phone })
         })
-        const data = response.json();
+        const data = await response.json();
         console.log("data", data);
+        if(data.success){
+            showAlert("Profile updated successfully", "Success");
+        }
+        else{
+            showAlert("Profile not updated", "danger");
+        }
     }
 
     const onChange = (e) => {

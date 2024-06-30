@@ -53,7 +53,7 @@ function App() {
               <Route path="/register" element={<Register showAlert={showAlert} />} />
               <Route path="/" element={<Home showAlert={showAlert} />}></Route>
               <Route path="/about" element={<About />}></Route>
-              <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/profile" element={<Profile showAlert={showAlert}/>}></Route>
             </Routes>
           </div>
         </Router>
