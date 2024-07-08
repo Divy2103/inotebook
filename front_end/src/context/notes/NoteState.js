@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import NoteContext from './NoteContext'
+import axios from 'axios'
 
 const NoteState = (props) => {
     const hostName = "http://localhost:4000"
@@ -22,17 +23,32 @@ const NoteState = (props) => {
         setUser(json)
     }
     // get all notes
+    // const getNotes = async () => {
+    //     //  API Call
+    //     const response = await fetch(`${hostName}/api/notes/fetchallnotes`, {
+    //         method: "GET",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "auth-token": localStorage.getItem('token')
+    //         }
+    //     });
+    //     console.log("response",response);
+    //     const json = await response.json();
+    //     console.log("json",json)
+    //     setNotes(json)
+    // }
+
     const getNotes = async () => {
         //  API Call
-        const response = await fetch(`${hostName}/api/notes/fetchallnotes`, {
-            method: "GET",
+        const response = await axios.get(`${hostName}/api/notes/fetchallnotes`, {
             headers: {
                 "Content-Type": "application/json",
                 "auth-token": localStorage.getItem('token')
             }
         });
-        const json = await response.json();
-        console.log(json)
+        console.log("response",response);
+        const json = response.data;
+        console.log("json",json);
         setNotes(json)
     }
 
