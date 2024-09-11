@@ -21,7 +21,7 @@ const userSchema = new Schema({
     },
     profilePic: {
         type: String,
-        default: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+        default: 'https://console.cloudinary.com/pm/c-98b5e068b8b334d09c66ccaa70f79f/media-explorer?assetId=994c7a5388026312d0057eddb0515a93'
     },
     phone:{
         type: String,
